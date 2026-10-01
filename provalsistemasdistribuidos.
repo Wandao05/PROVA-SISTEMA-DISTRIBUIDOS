@@ -1,0 +1,34 @@
+SERVIDOR.PY
+from xmlrpc.server import SimpleXMLRPCServer
+
+
+def calcular_pagamento(horas, valor_por_hora):
+    return horas * valor_por_hora
+
+
+servidor = SimpleXMLRPCServer(("localhost", 8005))
+
+servidor.register_function(
+    calcular_pagamento,
+    "calcular_pagamento"
+)
+
+print("Servidor RPC aguardando solicitações...")
+
+servidor.serve_forever()
+
+CLIENTE.PY
+from xmlrpc.client import ServerProxy
+
+
+servidor = ServerProxy("http://localhost:8005/")
+
+resultado = servidor.calcular_pagamento(8, 25)
+
+print("Valor do pagamento:", resultado)
+
+RESULTADO DO CLIENTE:
+Valor do pagamento: 200
+
+RESULTADO SERVIDOR:
+8 × 25 = 200
